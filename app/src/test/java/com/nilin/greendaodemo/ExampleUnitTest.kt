@@ -1,4 +1,4 @@
-package com.nilin.greendaotest
+package com.nilin.greendaodemo
 
 import org.junit.Test
 

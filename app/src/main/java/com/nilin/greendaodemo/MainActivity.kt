@@ -1,36 +1,26 @@
-package com.nilin.greendaotest
+package com.nilin.greendaodemo
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import android.widget.TextView
-import android.widget.EditText
 import android.view.View
 import android.widget.Toast
-
 
 
 class MainActivity : AppCompatActivity() {
 
     var userDao: UserDao?=null
-    private var etId: EditText? = null
-    private var etName: EditText? = null
-//    private var btnAdd: Button? = null
-//    private var btnDelete: Button? = null
-//    private var btnQuery: Button? = null
-    private var tvQuery: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initView()
         initDbHelp()
 
         /*新增一条数据*/
         btnAdd!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                val id = etId!!.text.toString()
-                val name = etName!!.text.toString()
+                val id = etId.text.toString()
+                val name = etName.text.toString()
                 if (isNotEmpty(id) && isNotEmpty(name)) {
                     val qb = userDao!!.queryBuilder()
                     val list = qb.where(UserDao.Properties.Id.eq(id)).list() as ArrayList<User>
@@ -60,15 +50,15 @@ class MainActivity : AppCompatActivity() {
         /*删除指定数据*/
         btnDelete!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                val id = etId!!.text.toString()
+                val id = etId.text.toString()
                 if (isNotEmpty(id)) {
                     userDao!!.deleteByKey(java.lang.Long.valueOf(id)!!)
                     val qb = userDao!!.queryBuilder()
                     val list = qb.where(UserDao.Properties.Id.eq(id)).list() as ArrayList<User>
                     if (list.size < 1) {
                         Toast.makeText(this@MainActivity, "删除数据成功", Toast.LENGTH_SHORT).show()
-                        etId!!.setText("")
-                        etName!!.setText("")
+                        etId.setText("")
+                        etName.setText("")
                     }
                 } else {
                     Toast.makeText(this@MainActivity, "id为空", Toast.LENGTH_SHORT).show()
@@ -79,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         /*查询数据*/
         btnQuery!!.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                val id = etId!!.text.toString()
+                val id = etId.text.toString()
                 if (isNotEmpty(id)) {
                     val qb = userDao!!.queryBuilder()
                     val list = qb.where(UserDao.Properties.Id.eq(id)).list() as ArrayList<User>
@@ -88,13 +78,13 @@ class MainActivity : AppCompatActivity() {
                         for (user in list) {
                             text = text + "\r\n" + user.name
                         }
-                        tvQuery!!.text = text
+                        tvQuery.text = text
                     } else {
-                        tvQuery!!.text = ""
+                        tvQuery.text = ""
                         Toast.makeText(this@MainActivity, "不存在该数据", Toast.LENGTH_SHORT).show()
                     }
-                    etId!!.setText("")
-                    etName!!.setText("")
+                    etId.setText("")
+                    etName.setText("")
                 } else {
                     Toast.makeText(this@MainActivity, "id为空", Toast.LENGTH_SHORT).show()
                 }
@@ -104,20 +94,11 @@ class MainActivity : AppCompatActivity() {
 
     /*初始化数据库相关*/
     private fun initDbHelp() {
-        val helper = DaoMaster.DevOpenHelper(this, "recluse-db", null)
+        val helper = DaoMaster.DevOpenHelper(this, "greendao", null)
         val db = helper.writableDatabase
         val daoMaster = DaoMaster(db)
         val daoSession = daoMaster.newSession()
         userDao = daoSession.userDao
-    }
-
-    private fun initView() {
-//        etId = findViewById<View>(R.id.etId)
-//        etName = findViewById<View>(R.id.etName)
-//        btnAdd = findViewById<View>(R.id.btnAdd) as Button
-//        btnDelete = findViewById<View>(R.id.btnDelete) as Button
-//        btnQuery = findViewById<View>(R.id.btnQuery) as Button
-//        tvQuery = findViewById<View>(R.id.tvQuery)
     }
 
     private fun isNotEmpty(s: String?): Boolean {

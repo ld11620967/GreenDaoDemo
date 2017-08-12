@@ -1,4 +1,4 @@
-package com.nilin.greendaotest
+package com.nilin.greendaodemo
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
